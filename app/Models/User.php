@@ -32,20 +32,31 @@ class User extends Authenticatable
         ];
     }
 
+    // --- Role Constants ---
+    const ROLE_ADMIN = 'administrator_sistem';
+    const ROLE_KOORDINATOR = 'koordinator_penagihan';
+    const ROLE_PETUGAS = 'petugas_penagihan';
+
+    const ROLE_LABELS = [
+        self::ROLE_ADMIN => 'Administrator Sistem',
+        self::ROLE_KOORDINATOR => 'Koordinator Penagihan',
+        self::ROLE_PETUGAS => 'Petugas Penagihan',
+    ];
+
     // --- Role helpers ---
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return $this->role === self::ROLE_ADMIN;
     }
 
-    public function isOperator(): bool
+    public function isKoordinator(): bool
     {
-        return $this->role === 'operator';
+        return $this->role === self::ROLE_KOORDINATOR;
     }
 
-    public function isSupervisor(): bool
+    public function isPetugas(): bool
     {
-        return $this->role === 'supervisor';
+        return $this->role === self::ROLE_PETUGAS;
     }
 
     public function hasRole(string|array $roles): bool
@@ -53,6 +64,11 @@ class User extends Authenticatable
         return is_array($roles)
             ? in_array($this->role, $roles)
             : $this->role === $roles;
+    }
+
+    public function getRoleLabel(): string
+    {
+        return self::ROLE_LABELS[$this->role] ?? ucfirst($this->role);
     }
 
     // --- Relationships ---

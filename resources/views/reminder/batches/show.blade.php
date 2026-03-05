@@ -22,7 +22,7 @@
             </div>
             {{-- Actions --}}
             <div class="flex flex-wrap gap-2">
-                @if(in_array($batch->status, ['draft', 'pending_approval']) && auth()->user()->hasRole(['admin', 'supervisor']))
+                @if(in_array($batch->status, ['draft', 'pending_approval']) && auth()->user()->hasRole(['administrator_sistem', 'koordinator_penagihan']))
                     <form method="POST" action="{{ route('reminder.batches.approve', $batch) }}" class="inline">@csrf
                         <button class="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition">✓ Setujui</button>
                     </form>

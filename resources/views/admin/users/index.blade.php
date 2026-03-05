@@ -6,6 +6,15 @@
             Tambah User
         </a>
     </div>
+
+    {{-- Flash messages --}}
+    @if(session('success'))
+    <div class="mb-4 px-4 py-3 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm">{{ session('success') }}</div>
+    @endif
+    @if(session('error'))
+    <div class="mb-4 px-4 py-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">{{ session('error') }}</div>
+    @endif
+
     <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
@@ -15,9 +24,25 @@
                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30">
                         <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">{{ $user->name }}</td>
                         <td class="px-4 py-3 text-gray-500">{{ $user->email }}</td>
-                        <td class="px-4 py-3 text-center"><span class="px-2 py-0.5 text-xs rounded-full font-medium {{ $user->role === 'admin' ? 'bg-purple-100 text-purple-700' : ($user->role === 'supervisor' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700') }}">{{ ucfirst($user->role) }}</span></td>
+                        <td class="px-4 py-3 text-center">
+                            <span class="px-2 py-0.5 text-xs rounded-full font-medium
+                                {{ $user->role === 'administrator_sistem' ? 'bg-purple-100 text-purple-700' : ($user->role === 'koordinator_penagihan' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700') }}">
+                                {{ $user->getRoleLabel() }}
+                            </span>
+                        </td>
                         <td class="px-4 py-3 text-center"><span class="px-2 py-0.5 text-xs rounded-full {{ $user->is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700' }}">{{ $user->is_active ? 'Aktif' : 'Nonaktif' }}</span></td>
-                        <td class="px-4 py-3 text-center"><a href="{{ route('admin.users.edit', $user) }}" class="text-xs text-blue-600 hover:underline">Edit</a></td>
+                        <td class="px-4 py-3 text-center">
+                            <div class="flex items-center justify-center gap-2">
+                                <a href="{{ route('admin.users.edit', $user) }}" class="text-xs text-blue-600 hover:underline">Edit</a>
+                                @if($user->id !== auth()->id())
+                                <form method="POST" action="{{ route('admin.users.destroy', $user) }}" onsubmit="return confirm('Yakin ingin menghapus user {{ $user->name }}?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-xs text-red-600 hover:underline">Hapus</button>
+                                </form>
+                                @endif
+                            </div>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>

@@ -43,16 +43,17 @@ Route::middleware(['auth'])->group(function () {
         // Vehicle Status
         Route::post('tasks/{task}/vehicle-status', [VehicleStatusController::class, 'store'])->name('vehicle-statuses.store');
 
-        // Employee Performance
-        Route::get('kinerja', [EmployeePerformanceController::class, 'index'])->name('kinerja.index');
+        // Employee Performance (Admin + Koordinator only)
+        Route::get('kinerja', [EmployeePerformanceController::class, 'index'])->name('kinerja.index')
+            ->middleware('role:administrator_sistem,koordinator_penagihan');
 
-        // SPSOPKB
+        // SPSOPKB (All roles)
         Route::get('spsopkb', [SpsopkbController::class, 'index'])->name('spsopkb.index');
         Route::post('spsopkb/{task}/promote', [SpsopkbController::class, 'promote'])->name('spsopkb.promote');
     });
 
-    // --- Import ---
-    Route::prefix('import')->name('import.')->middleware('role:admin,operator')->group(function () {
+    // --- Import (Admin + Koordinator + Petugas) ---
+    Route::prefix('import')->name('import.')->middleware('role:administrator_sistem,koordinator_penagihan,petugas_penagihan')->group(function () {
         Route::get('/', [ImportController::class, 'index'])->name('index');
         Route::post('/upload', [ImportController::class, 'upload'])->name('upload');
         Route::get('/template/{type}', [ImportController::class, 'downloadTemplate'])->name('template');
@@ -68,12 +69,12 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('vehicles', VehicleDueController::class)->only(['index', 'show']);
 
         // Reminder Rules (admin only)
-        Route::resource('rules', ReminderRuleController::class)->middleware('role:admin');
+        Route::resource('rules', ReminderRuleController::class)->middleware('role:administrator_sistem');
 
         // Reminder Batches
         Route::resource('batches', ReminderBatchController::class)->only(['index', 'show', 'create', 'store']);
-        Route::post('batches/{batch}/approve', [ReminderBatchController::class, 'approve'])->name('batches.approve')->middleware('role:admin,supervisor');
-        Route::post('batches/{batch}/reject', [ReminderBatchController::class, 'reject'])->name('batches.reject')->middleware('role:admin,supervisor');
+        Route::post('batches/{batch}/approve', [ReminderBatchController::class, 'approve'])->name('batches.approve')->middleware('role:administrator_sistem,koordinator_penagihan');
+        Route::post('batches/{batch}/reject', [ReminderBatchController::class, 'reject'])->name('batches.reject')->middleware('role:administrator_sistem,koordinator_penagihan');
         Route::post('batches/{batch}/schedule', [ReminderBatchController::class, 'schedule'])->name('batches.schedule');
 
         // Message Logs
@@ -82,7 +83,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // --- Admin: User Management ---
-    Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function () {
+    Route::prefix('admin')->name('admin.')->middleware('role:administrator_sistem')->group(function () {
         Route::resource('users', UserManagementController::class);
     });
 });

@@ -77,9 +77,52 @@ class ImportService
             return $this->parseCsv($file->getPathname());
         }
 
-        // For xlsx, we'd need a package like maatwebsite/excel
-        // For now, handle CSV only and return empty for xlsx with a note
+        // XLSX parsing via PhpSpreadsheet
+        if (in_array($extension, ['xlsx', 'xls']) && class_exists(\PhpOffice\PhpSpreadsheet\IOFactory::class)) {
+            return $this->parseXlsx($file->getPathname());
+        }
+
+        // Fallback: try as CSV
         return $this->parseCsv($file->getPathname());
+    }
+
+    private function parseXlsx(string $path): array
+    {
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($path);
+        $sheet = $spreadsheet->getActiveSheet();
+        $rows = [];
+        $headers = null;
+
+        foreach ($sheet->getRowIterator() as $row) {
+            $cellIterator = $row->getCellIterator();
+            $cellIterator->setIterateOnlyExistingCells(false);
+
+            $rowData = [];
+            foreach ($cellIterator as $cell) {
+                $rowData[] = trim((string) $cell->getValue());
+            }
+
+            // Skip completely empty rows
+            if (empty(array_filter($rowData))) {
+                continue;
+            }
+
+            if (!$headers) {
+                $headers = array_map(fn($h) => Str::snake(trim(strtolower($h))), $rowData);
+                continue;
+            }
+
+            if (count($rowData) !== count($headers)) {
+                // Pad or trim to match header count
+                $rowData = array_pad($rowData, count($headers), '');
+                $rowData = array_slice($rowData, 0, count($headers));
+            }
+
+            $rows[] = array_combine($headers, $rowData);
+        }
+
+        $spreadsheet->disconnectWorksheets();
+        return $rows;
     }
 
     private function parseCsv(string $path): array

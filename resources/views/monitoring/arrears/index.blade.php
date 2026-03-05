@@ -23,14 +23,14 @@
                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30">
                         <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">{{ $item->plate_number }}</td>
                         <td class="px-4 py-3 text-gray-600 dark:text-gray-300">{{ $item->owner_name ?? '-' }}</td>
-                        <td class="px-4 py-3 text-gray-500">{{ $item->masked_phone }}</td>
+                        <td class="px-4 py-3 text-gray-500 dark:text-gray-400">{{ $item->phone ?? '-' }}</td>
                         <td class="px-4 py-3 text-right text-gray-900 dark:text-white font-medium">Rp {{ number_format($item->arrears_amount, 0, ',', '.') }}</td>
-                        <td class="px-4 py-3 text-center text-gray-500">{{ $item->arrears_years }}</td>
+                        <td class="px-4 py-3 text-center text-gray-500 dark:text-gray-400">{{ $item->arrears_years }}</td>
                         <td class="px-4 py-3 text-center space-x-1">
                             @if($item->flag_phone_invalid)<span class="inline-block w-2 h-2 rounded-full bg-red-500" title="HP tidak valid"></span>@endif
                             @if($item->flag_address_suspect)<span class="inline-block w-2 h-2 rounded-full bg-amber-500" title="Alamat rawan"></span>@endif
                         </td>
-                        <td class="px-4 py-3 text-center text-gray-400 text-xs">{{ $item->calculation_date?->format('d/m/Y') ?? '-' }}</td>
+                        <td class="px-4 py-3 text-center text-gray-400 dark:text-gray-500 text-xs">{{ $item->calculation_date?->format('d/m/Y') ?? '-' }}</td>
                     </tr>
                     @empty
                     <tr><td colspan="7" class="px-4 py-12 text-center text-gray-400">Belum ada data tunggakan</td></tr>

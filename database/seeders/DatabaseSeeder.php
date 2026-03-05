@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Administrator',
                 'password' => Hash::make('password'),
-                'role' => 'admin',
+                'role' => 'administrator_sistem',
                 'is_active' => true,
             ]
         );
@@ -26,19 +26,19 @@ class DatabaseSeeder extends Seeder
         $operator = User::firstOrCreate(
             ['email' => 'operator@samsat.go.id'],
             [
-                'name' => 'Operator Samsat',
+                'name' => 'Koordinator Samsat',
                 'password' => Hash::make('password'),
-                'role' => 'operator',
+                'role' => 'koordinator_penagihan',
                 'is_active' => true,
             ]
         );
 
         $supervisor = User::firstOrCreate(
-            ['email' => 'supervisor@samsat.go.id'],
+            ['email' => 'petugas@samsat.go.id'],
             [
-                'name' => 'Supervisor Samsat',
+                'name' => 'Petugas Samsat',
                 'password' => Hash::make('password'),
-                'role' => 'supervisor',
+                'role' => 'petugas_penagihan',
                 'is_active' => true,
             ]
         );

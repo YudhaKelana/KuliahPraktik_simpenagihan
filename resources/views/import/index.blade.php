@@ -5,14 +5,33 @@
         {{-- Templates --}}
         <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 mb-6 shadow-sm">
             <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-3">Download Template</h3>
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 @foreach(['arrears' => 'Tunggakan', 'tasks' => 'Tugas', 'followups' => 'Follow-up', 'vehicle_statuses' => 'Status Kendaraan', 'taxpayers' => 'Wajib Pajak', 'vehicles' => 'Kendaraan'] as $key => $label)
-                <a href="{{ route('import.template', $key) }}" class="flex items-center px-3 py-2 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-300 transition">
-                    <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
-                    {{ $label }}
-                </a>
+                <div class="rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 p-3">
+                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{ $label }}</p>
+                    <div class="flex gap-2">
+                        <a href="{{ route('import.template', ['type' => $key, 'format' => 'csv']) }}"
+                           class="flex-1 inline-flex items-center justify-center px-3 py-1.5 rounded-md bg-white dark:bg-gray-600 border border-gray-300 dark:border-gray-500 text-xs font-medium text-gray-600 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-300 hover:text-blue-600 transition">
+                            <svg class="w-3.5 h-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+                            CSV
+                        </a>
+                        @if($hasPhpSpreadsheet)
+                        <a href="{{ route('import.template', ['type' => $key, 'format' => 'xlsx']) }}"
+                           class="flex-1 inline-flex items-center justify-center px-3 py-1.5 rounded-md bg-white dark:bg-gray-600 border border-gray-300 dark:border-gray-500 text-xs font-medium text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 hover:border-emerald-300 transition">
+                            <svg class="w-3.5 h-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+                            Excel
+                        </a>
+                        @endif
+                    </div>
+                </div>
                 @endforeach
             </div>
+            @if(!$hasPhpSpreadsheet)
+            <p class="mt-3 text-xs text-amber-600 dark:text-amber-400">
+                <svg class="w-3.5 h-3.5 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>
+                Untuk download template Excel (.xlsx), install <code class="bg-gray-200 dark:bg-gray-600 px-1 rounded">phpoffice/phpspreadsheet</code> via Composer.
+            </p>
+            @endif
         </div>
 
         {{-- Upload Form --}}

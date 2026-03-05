@@ -5,12 +5,12 @@
         </a>
         <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 mb-6 shadow-sm">
             <h1 class="text-xl font-bold text-gray-900 dark:text-white mb-1">{{ $arrear->plate_number }}</h1>
-            <p class="text-sm text-gray-500">{{ $arrear->owner_name ?? '-' }}</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">{{ $arrear->owner_name ?? '-' }}</p>
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4 text-sm">
-                <div><span class="text-gray-500">HP</span><p class="font-medium text-gray-900 dark:text-white">{{ $arrear->masked_phone }}</p></div>
-                <div><span class="text-gray-500">Alamat</span><p class="font-medium text-gray-900 dark:text-white">{{ $arrear->address ?? '-' }}</p></div>
-                <div><span class="text-gray-500">Tunggakan</span><p class="font-medium text-red-600">Rp {{ number_format($arrear->arrears_amount, 0, ',', '.') }} ({{ $arrear->arrears_years }} thn)</p></div>
-                <div><span class="text-gray-500">Kendaraan</span><p class="font-medium text-gray-900 dark:text-white">{{ $arrear->vehicle_brand ?? '-' }} {{ $arrear->vehicle_year ?? '' }}</p></div>
+                <div><span class="text-gray-500 dark:text-gray-400">HP</span><p class="font-medium text-gray-900 dark:text-white">{{ $arrear->phone ?? '-' }}</p></div>
+                <div><span class="text-gray-500 dark:text-gray-400">Alamat</span><p class="font-medium text-gray-900 dark:text-white">{{ $arrear->address ?? '-' }}</p></div>
+                <div><span class="text-gray-500 dark:text-gray-400">Tunggakan</span><p class="font-medium text-red-600 dark:text-red-400">Rp {{ number_format($arrear->arrears_amount, 0, ',', '.') }} ({{ $arrear->arrears_years }} thn)</p></div>
+                <div><span class="text-gray-500 dark:text-gray-400">Kendaraan</span><p class="font-medium text-gray-900 dark:text-white">{{ $arrear->vehicle_brand ?? '-' }} {{ $arrear->vehicle_year ?? '' }}</p></div>
             </div>
             @if($arrear->flag_phone_invalid || $arrear->flag_address_suspect)
             <div class="mt-3 flex space-x-2">
@@ -30,7 +30,7 @@
                         <a href="{{ route('monitoring.tasks.show', $task) }}" class="text-sm font-medium text-blue-600 hover:underline">Tugas #{{ $task->id }}</a>
                         <span class="px-2 py-0.5 text-xs rounded-full {{ $task->status === 'done' ? 'bg-emerald-100 text-emerald-700' : ($task->status === 'in_progress' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700') }}">{{ ucfirst(str_replace('_',' ',$task->status)) }}</span>
                     </div>
-                    <p class="text-xs text-gray-500">PIC: {{ $task->employee->name ?? '-' }} &bull; {{ $task->followups->count() }} follow-up</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">PIC: {{ $task->employee->name ?? '-' }} &bull; {{ $task->followups->count() }} follow-up</p>
                 </div>
                 @empty
                 <p class="px-4 py-8 text-center text-gray-400 text-sm">Belum ada tugas terkait</p>
