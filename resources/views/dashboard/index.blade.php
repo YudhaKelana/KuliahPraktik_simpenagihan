@@ -1,6 +1,6 @@
 <x-layouts.app :title="'Dashboard'">
     {{-- KPI Cards --}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 animate-stagger" data-scroll>
         {{-- Total Tunggakan --}}
         <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 shadow-sm hover:shadow-md transition-shadow">
             <div class="flex items-center justify-between mb-3">
@@ -57,8 +57,8 @@
         </div>
     </div>
 
-    {{-- Charts Row — fixed height wrapper to prevent infinite growth --}}
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+    {{-- Charts Row --}}
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6 animate-stagger" data-scroll>
         <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 shadow-sm">
             <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-4">Distribusi Status Kendaraan</h3>
             <div class="relative" style="height: 250px;">
@@ -74,7 +74,7 @@
     </div>
 
     {{-- Reminder Stats --}}
-    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
+    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6 animate-stagger" data-scroll>
         <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl p-4 text-white shadow-sm">
             <p class="text-xs opacity-80 uppercase tracking-wide">WA Terkirim Hari Ini</p>
             <p class="text-2xl font-bold mt-1">{{ $reminderStats['sent_today'] }}</p>
@@ -94,7 +94,7 @@
     </div>
 
     {{-- Priority Tables --}}
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6 animate-stagger" data-scroll>
         {{-- Overdue --}}
         <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
             <div class="px-5 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
@@ -162,7 +162,7 @@
     </div>
 
     {{-- Employee Workload --}}
-    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm animate-on-scroll" data-scroll>
         <div class="px-5 py-4 border-b border-gray-200 dark:border-gray-700">
             <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200">Beban Kerja Pegawai</h3>
         </div>
@@ -193,7 +193,24 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <script>
-    // Detect dark mode
+    // ── Scroll Reveal Animation ──
+    (function() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.08,
+            rootMargin: '0px 0px -40px 0px'
+        });
+
+        document.querySelectorAll('[data-scroll]').forEach(el => observer.observe(el));
+    })();
+
+    // ── Charts ──
     const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const textColor = isDark ? '#d1d5db' : '#6b7280';
     const gridColor = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)';

@@ -57,7 +57,7 @@
                         <td class="px-4 py-3 text-gray-500">#{{ $task->id }}</td>
                         <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">{{ $task->arrearsItem->plate_number ?? '-' }}</td>
                         <td class="px-4 py-3 text-gray-600 dark:text-gray-300">{{ $task->arrearsItem->owner_name ?? '-' }}</td>
-                        <td class="px-4 py-3 text-gray-500">{{ $task->arrearsItem->masked_phone ?? '-' }}</td>
+                        <td class="px-4 py-3 text-gray-500">{{ $task->arrearsItem->phone ?? '-' }}</td>
                         <td class="px-4 py-3 text-gray-600 dark:text-gray-300">{{ $task->employee->name ?? '-' }}</td>
                         <td class="px-4 py-3 text-center">
                             @php $statusColors = ['new' => 'bg-gray-100 text-gray-700', 'in_progress' => 'bg-blue-100 text-blue-700', 'done' => 'bg-emerald-100 text-emerald-700']; @endphp

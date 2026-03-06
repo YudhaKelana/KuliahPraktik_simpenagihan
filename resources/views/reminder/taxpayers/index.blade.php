@@ -18,7 +18,7 @@
                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30">
                         <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">{{ $tp->name }}</td>
                         <td class="px-4 py-3 text-gray-500">{{ $tp->nik ?? '-' }}</td>
-                        <td class="px-4 py-3 text-gray-500">{{ $tp->masked_phone }}</td>
+                        <td class="px-4 py-3 text-gray-500">{{ $tp->phone_e164 ?? '-' }}</td>
                         <td class="px-4 py-3 text-center text-gray-600">{{ $tp->vehicles_count }}</td>
                         <td class="px-4 py-3 text-center">
                             @if($tp->opt_out)

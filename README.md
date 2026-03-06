@@ -22,11 +22,13 @@ Dengan aplikasi ini, proses yang sebelumnya dilakukan secara manual (mencatat di
 |---|---|
 | 📊 **Dashboard** | Ringkasan data: total tunggakan, tugas, performa petugas, tren follow-up, dan status kendaraan — semua dalam satu halaman. |
 | 📋 **Monitoring Penagihan** | Daftar tunggakan wajib pajak, pembuatan & pengelolaan tugas penagihan, pencatatan follow-up dan status kendaraan. |
-| 📱 **Reminder WhatsApp** | Pengiriman pesan pengingat otomatis ke wajib pajak melalui WhatsApp, lengkap dengan alur persetujuan. |
-| 📂 **Import Data** | Unggah data tunggakan dan kendaraan dari file Excel/CSV. |
-| 🔐 **Manajemen Pengguna** | Kelola akun petugas dengan pembagian peran: Admin, Supervisor, dan Operator. |
+| 📱 **Reminder WhatsApp** | Pengiriman pesan pengingat otomatis ke wajib pajak melalui WhatsApp, lengkap dengan alur persetujuan (approval flow). |
+| 📂 **Import Data** | Unggah data tunggakan dan kendaraan dari file **Excel (.xlsx)** atau **CSV**. Template bisa diunduh di kedua format. |
+| 🔐 **Manajemen Pengguna** | Kelola akun petugas dengan pembagian peran: Administrator Sistem, Koordinator Penagihan, dan Petugas Penagihan. Termasuk fitur hapus user. |
 | 📈 **Kinerja Petugas** | Pantau jumlah tugas dan tindak lanjut yang dikerjakan setiap petugas. |
 | 📝 **Audit Trail** | Catatan otomatis setiap perubahan data untuk keperluan akuntabilitas. |
+| 🌙 **Dark Mode** | Tema gelap otomatis mengikuti preferensi sistem operasi pengguna (system-aware dark mode). |
+| 📄 **SPSOPKB** | Penerbitan Surat Pemberitahuan Sekaligus Peringatan Objek Pajak Kendaraan Bermotor untuk wajib pajak dengan tunggakan tinggi. |
 
 ---
 
@@ -44,6 +46,7 @@ Bagian ini ditujukan untuk tim IT / developer yang ingin menjalankan, mengembang
 | Queue / Cache / Session | **Database** driver (bawaan Laravel) |
 | WhatsApp API | **Fonnte** (pluggable, via environment config) |
 | Build Tool | **Vite 7** + `laravel-vite-plugin` |
+| Excel Import | **PhpSpreadsheet** (opsional, untuk dukungan format `.xlsx`) |
 
 ### Arsitektur Aplikasi
 
@@ -52,7 +55,7 @@ app/
 ├── Http/
 │   ├── Controllers/         # Controller per modul (Dashboard, Arrears, Task, Reminder, dll)
 │   └── Middleware/
-│       └── RoleMiddleware    # Middleware otorisasi berbasis role (admin, supervisor, operator)
+│       └── RoleMiddleware    # Middleware otorisasi berbasis role
 ├── Models/                  # Eloquent Models (14 model)
 │   ├── Taxpayer              → Data wajib pajak
 │   ├── Vehicle               → Data kendaraan
@@ -68,38 +71,70 @@ app/
 │   ├── SpsopkbLetter         → Surat SPSOPKB
 │   ├── AuditTrail            → Audit trail perubahan data
 │   └── User                  → Akun pengguna + role helper
+├── Services/
+│   └── ImportService         # Service untuk parsing CSV & XLSX
 database/
-├── migrations/              # 16 migration files
+├── migrations/              # Migration files
 └── seeders/
     ├── DatabaseSeeder        # Seeder utama
     └── DummyDataSeeder       # Dummy data untuk development
 resources/views/
 ├── dashboard/               # Halaman dashboard
 ├── monitoring/              # Halaman monitoring penagihan
+│   ├── arrears/             # Tunggakan (index, show)
+│   ├── tasks/               # Tugas (index, create, show, edit)
+│   ├── employees/           # Kinerja pegawai
+│   └── spsopkb/             # Surat SPSOPKB
 ├── reminder/                # Halaman reminder WhatsApp
-├── import/                  # Halaman import data
+│   ├── taxpayers/           # Kontak wajib pajak
+│   ├── vehicles/            # Data kendaraan
+│   ├── batches/             # Batch reminder (index, show, create)
+│   ├── rules/               # Aturan reminder (index, create/edit)
+│   └── logs/                # Log pesan
+├── import/                  # Halaman import data (index, result)
 ├── admin/                   # Halaman manajemen pengguna
+│   └── users/               # CRUD user (index, create, edit)
 ├── layouts/                 # Layout & navigation
+│   └── partials/            # Sidebar & topbar
 └── components/              # Blade components reusable
 ```
 
 ### Role & Permissions
 
-| Role | Akses |
-|---|---|
-| `admin` | Akses penuh: user management, reminder rules, import data, approval batch, semua fitur monitoring |
-| `supervisor` | Monitoring penagihan, approval/reject batch reminder, kinerja petugas |
-| `operator` | Monitoring penagihan, import data, buat batch reminder, input follow-up |
+Aplikasi menggunakan 3 role berbasis **tupoksi** di Samsat:
+
+| Role | Label | Akses |
+|---|---|---|
+| `administrator_sistem` | Administrator Sistem | Akses penuh: kelola user, import data, aturan reminder, approve batch, semua fitur monitoring |
+| `koordinator_penagihan` | Koordinator Penagihan | Monitoring penagihan, approve/reject batch reminder, kinerja pegawai, SPSOPKB, import data. **Tidak bisa** kelola user & aturan reminder |
+| `petugas_penagihan` | Petugas Penagihan | Input tugas & follow-up, import data, buat batch reminder, lihat tunggakan & SPSOPKB. **Tidak bisa** approve batch, kelola user, atau lihat kinerja pegawai |
+
+### Matriks Akses Menu Sidebar
+
+| Menu | Administrator Sistem | Koordinator Penagihan | Petugas Penagihan |
+|---|:---:|:---:|:---:|
+| Dashboard | ✓ | ✓ | ✓ |
+| Tunggakan | ✓ | ✓ | ✓ |
+| Tugas & Follow-up | ✓ | ✓ | ✓ |
+| Kinerja Pegawai | ✓ | ✓ | ✗ |
+| SPSOPKB | ✓ | ✓ | ✓ |
+| Kontak WP | ✓ | ✓ | ✓ |
+| Data Kendaraan | ✓ | ✓ | ✓ |
+| Batch Reminder | ✓ | ✓ | ✓ |
+| Log Pesan | ✓ | ✓ | ✓ |
+| Import Data | ✓ | ✓ | ✓ |
+| Kelola User | ✓ | ✗ | ✗ |
+| Aturan Reminder | ✓ | ✗ | ✗ |
 
 ### Modul Routing
 
 | Prefix | Modul | Middleware |
 |---|---|---|
 | `/` | Dashboard | `auth` |
-| `/monitoring` | Arrears, Tasks, Follow-up, Vehicle Status, Kinerja, SPSOPKB | `auth` |
-| `/import` | Import Excel/CSV | `auth`, `role:admin,operator` |
-| `/reminder` | Taxpayers, Vehicles, Rules, Batches, Message Logs | `auth` (rules: `role:admin`, approval: `role:admin,supervisor`) |
-| `/admin` | User Management | `auth`, `role:admin` |
+| `/monitoring` | Arrears, Tasks, Follow-up, Vehicle Status, Kinerja, SPSOPKB | `auth` (kinerja: `role:administrator_sistem,koordinator_penagihan`) |
+| `/import` | Import Excel/CSV | `auth`, `role:administrator_sistem,koordinator_penagihan,petugas_penagihan` |
+| `/reminder` | Taxpayers, Vehicles, Rules, Batches, Message Logs | `auth` (rules: `role:administrator_sistem`, approval: `role:administrator_sistem,koordinator_penagihan`) |
+| `/admin` | User Management | `auth`, `role:administrator_sistem` |
 
 ---
 
@@ -141,7 +176,10 @@ php artisan db:seed
 # 8. Install dependency frontend
 npm install
 
-# 9. Build asset frontend
+# 9. (Opsional) Install PhpSpreadsheet untuk dukungan import Excel (.xlsx)
+composer require phpoffice/phpspreadsheet
+
+# 10. Build asset frontend
 npm run build
 ```
 
@@ -156,6 +194,16 @@ php artisan serve          # Server Laravel di http://localhost:8000
 npm run dev                # Vite dev server (hot-reload)
 php artisan queue:listen   # Queue worker
 ```
+
+### Akun Default (Seeder)
+
+| Email | Password | Role |
+|---|---|---|
+| `admin@samsat.go.id` | `password` | Administrator Sistem |
+| `operator@samsat.go.id` | `password` | Koordinator Penagihan |
+| `petugas@samsat.go.id` | `password` | Petugas Penagihan |
+
+> ⚠️ **Penting:** Ganti password default setelah deployment ke production.
 
 ### Konfigurasi WhatsApp (Fonnte)
 

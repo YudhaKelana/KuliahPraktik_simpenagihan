@@ -25,7 +25,7 @@
                 <div><span class="text-gray-500">PIC</span><p class="font-medium text-gray-900 dark:text-white">{{ $task->employee->name ?? '-' }}</p></div>
                 <div><span class="text-gray-500">Tgl Tugas</span><p class="font-medium text-gray-900 dark:text-white">{{ $task->assigned_date?->format('d/m/Y') ?? '-' }}</p></div>
                 <div><span class="text-gray-500">Umur</span><p class="font-medium text-gray-900 dark:text-white">{{ $task->age_days }} hari</p></div>
-                <div><span class="text-gray-500">HP</span><p class="font-medium text-gray-900 dark:text-white">{{ $task->arrearsItem->masked_phone ?? '-' }}</p></div>
+                <div><span class="text-gray-500">HP</span><p class="font-medium text-gray-900 dark:text-white">{{ $task->arrearsItem->phone ?? '-' }}</p></div>
             </div>
             @if($task->arrearsItem?->arrears_amount > 0)
             <div class="mt-3 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 text-sm">

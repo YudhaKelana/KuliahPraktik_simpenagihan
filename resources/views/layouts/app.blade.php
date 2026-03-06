@@ -7,7 +7,7 @@
     <title>{{ $title ?? 'Samsat Monitoring' }} — Samsat TPI</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="h-full bg-gray-50 dark:bg-gray-900">
+<body class="h-full bg-gray-100 dark:bg-gray-900">
     <div class="min-h-full flex">
         {{-- Sidebar --}}
         @include('layouts.partials.sidebar')
@@ -41,7 +41,7 @@
             </main>
 
             {{-- Footer --}}
-            <footer class="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-6 py-3 text-center text-xs text-gray-500 dark:text-gray-400">
+            <footer class="border-t border-gray-700/50 bg-gray-900 px-6 py-3 text-center text-xs text-gray-400">
                 &copy; {{ date('Y') }} UPTD PPD Samsat Kota Tanjungpinang — Seksi Penagihan
             </footer>
         </div>
