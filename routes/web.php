@@ -69,7 +69,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('vehicles', VehicleDueController::class)->only(['index', 'show']);
 
         // Reminder Rules (admin only)
-        Route::resource('rules', ReminderRuleController::class)->middleware('role:administrator_sistem');
+        Route::resource('rules', ReminderRuleController::class)->except(['show'])->middleware('role:administrator_sistem');
 
         // Reminder Batches
         Route::resource('batches', ReminderBatchController::class)->only(['index', 'show', 'create', 'store']);
@@ -84,6 +84,6 @@ Route::middleware(['auth'])->group(function () {
 
     // --- Admin: User Management ---
     Route::prefix('admin')->name('admin.')->middleware('role:administrator_sistem')->group(function () {
-        Route::resource('users', UserManagementController::class);
+        Route::resource('users', UserManagementController::class)->except(['show']);
     });
 });
