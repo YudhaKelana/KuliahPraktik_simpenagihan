@@ -20,23 +20,41 @@
                 <div><span class="text-gray-500">Gagal</span><p class="font-medium text-red-600">{{ $batch->failed_count }}</p></div>
                 <div><span class="text-gray-500">Dilewati</span><p class="font-medium text-gray-500">{{ $batch->skipped_count }}</p></div>
             </div>
+            {{-- Rejection Info --}}
+            @if($batch->status === 'rejected' && $batch->reject_reason)
+                <div class="mb-4 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
+                    <p class="text-xs font-semibold text-red-600 dark:text-red-400 uppercase tracking-wide mb-1">Alasan Penolakan</p>
+                    <p class="text-sm text-red-700 dark:text-red-300">{{ $batch->reject_reason }}</p>
+                </div>
+            @endif
+
             {{-- Actions --}}
-            <div class="flex flex-wrap gap-2">
-                @if(in_array($batch->status, ['draft', 'pending_approval']) && auth()->user()->hasRole(['administrator_sistem', 'koordinator_penagihan']))
-                    <form method="POST" action="{{ route('reminder.batches.approve', $batch) }}" class="inline">@csrf
-                        <button class="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition">✓ Setujui</button>
+            @if(in_array($batch->status, ['draft', 'pending_approval']) && auth()->user()->hasRole(['administrator_sistem', 'koordinator_penagihan']))
+                <div class="border-t border-gray-200 dark:border-gray-700 pt-4 space-y-4">
+                    {{-- Approve --}}
+                    <div class="flex items-center gap-3">
+                        <form method="POST" action="{{ route('reminder.batches.approve', $batch) }}" class="inline">@csrf
+                            <button class="px-5 py-2.5 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition shadow-sm">✓ Setujui Batch</button>
+                        </form>
+                    </div>
+
+                    {{-- Reject --}}
+                    <form method="POST" action="{{ route('reminder.batches.reject', $batch) }}" class="space-y-3" onsubmit="return this.reject_reason.value.trim() ? true : (alert('Isi alasan penolakan terlebih dahulu'),false)">
+                        @csrf
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Alasan Penolakan</label>
+                        <textarea name="reject_reason" rows="3" required placeholder="Tuliskan alasan penolakan batch ini..." class="w-full rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-sm dark:text-white focus:ring-red-500 focus:border-red-500"></textarea>
+                        <button type="submit" class="px-5 py-2.5 rounded-lg bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition shadow-sm">✗ Tolak Batch</button>
                     </form>
-                    <form method="POST" action="{{ route('reminder.batches.reject', $batch) }}" class="inline flex items-center gap-2" onsubmit="return this.reject_reason.value ? true : (alert('Isi alasan penolakan'),false)">@csrf
-                        <input type="text" name="reject_reason" placeholder="Alasan..." class="rounded-lg border-gray-300 text-sm px-3 py-2 w-40">
-                        <button class="px-4 py-2 rounded-lg bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition">✗ Tolak</button>
-                    </form>
-                @endif
-                @if($batch->status === 'approved')
+                </div>
+            @endif
+
+            @if($batch->status === 'approved' && auth()->user()->hasRole(['administrator_sistem', 'koordinator_penagihan']))
+                <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
                     <form method="POST" action="{{ route('reminder.batches.schedule', $batch) }}" class="inline">@csrf
-                        <button class="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition">🚀 Jadwalkan Kirim</button>
+                        <button class="px-5 py-2.5 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition shadow-sm">🚀 Jadwalkan Kirim</button>
                     </form>
-                @endif
-            </div>
+                </div>
+            @endif
         </div>
 
         {{-- Items --}}

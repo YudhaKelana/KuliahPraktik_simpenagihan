@@ -75,7 +75,8 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('batches', ReminderBatchController::class)->only(['index', 'show', 'create', 'store']);
         Route::post('batches/{batch}/approve', [ReminderBatchController::class, 'approve'])->name('batches.approve')->middleware('role:administrator_sistem,koordinator_penagihan');
         Route::post('batches/{batch}/reject', [ReminderBatchController::class, 'reject'])->name('batches.reject')->middleware('role:administrator_sistem,koordinator_penagihan');
-        Route::post('batches/{batch}/schedule', [ReminderBatchController::class, 'schedule'])->name('batches.schedule');
+        Route::post('batches/{batch}/schedule', [ReminderBatchController::class, 'schedule'])->name('batches.schedule')
+            ->middleware('role:administrator_sistem,koordinator_penagihan');
 
         // Message Logs
         Route::get('logs', [MessageLogController::class, 'index'])->name('logs.index');

@@ -25,7 +25,7 @@ class ReminderService
 
         $batch = ReminderBatch::create([
             'created_by' => $userId,
-            'status' => 'draft',
+            'status' => 'pending_approval',
             'filter_description' => $filterDescription ?? "Rule: {$rule->name}, Jatuh tempo: {$dueDateFrom} s/d {$dueDateTo}",
         ]);
 

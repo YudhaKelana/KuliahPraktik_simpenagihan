@@ -100,7 +100,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // --- Dummy Data ---
-        $this->call(DummyDataSeeder::class);
+        // --- Reminder Data ---
+        $this->call(ReminderDataSeeder::class);
     }
 }
