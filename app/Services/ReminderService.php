@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Jobs\SendWhatsappMessage;
+use App\Jobs\SendReminderEmail;
 use App\Models\MessageLog;
 use App\Models\ReminderBatch;
 use App\Models\ReminderItem;
@@ -50,8 +50,8 @@ class ReminderService
 
             if ($taxpayer->opt_out) {
                 $skipReason = 'opt_out';
-            } elseif (empty($taxpayer->phone_e164) || $taxpayer->flag_phone_invalid) {
-                $skipReason = 'phone_invalid';
+            } elseif (empty($taxpayer->email)) {
+                $skipReason = 'email_missing';
             } elseif ($vehicle->status_payment === 'paid') {
                 $skipReason = 'already_paid';
             }
@@ -129,14 +129,16 @@ class ReminderService
         // Create message log
         $log = MessageLog::create([
             'reminder_item_id' => $item->id,
-            'provider' => config('samsat.wa.provider'),
+            'provider' => 'smtp',
+            'channel' => 'email',
             'phone' => $taxpayer->phone_e164,
+            'recipient_email' => $taxpayer->email,
             'message_body' => $messageBody,
             'status' => 'queued',
         ]);
 
-        // Dispatch job
-        SendWhatsappMessage::dispatch($log)
+        // Dispatch email job
+        SendReminderEmail::dispatch($log)
             ->delay($item->planned_send_at > now() ? $item->planned_send_at : null);
     }
 }

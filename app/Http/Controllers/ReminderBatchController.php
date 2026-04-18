@@ -16,7 +16,8 @@ class ReminderBatchController extends Controller
     {
         $batches = ReminderBatch::with('creator', 'approver')
             ->latest()
-            ->paginate(20);
+            ->paginate($request->input('per_page', 20))
+            ->withQueryString();
 
         return view('reminder.batches.index', compact('batches'));
     }
@@ -50,12 +51,13 @@ class ReminderBatchController extends Controller
         return redirect()->route('reminder.batches.show', $batch)->with('success', "Batch berhasil dibuat dengan {$batch->total_items} item.");
     }
 
-    public function show(ReminderBatch $batch)
+    public function show(Request $request, ReminderBatch $batch)
     {
         $batch->load(['creator', 'approver']);
         $items = $batch->items()
             ->with(['vehicle.taxpayer', 'rule'])
-            ->paginate(20);
+            ->paginate($request->input('per_page', 20))
+            ->withQueryString();
 
         return view('reminder.batches.show', compact('batch', 'items'));
     }

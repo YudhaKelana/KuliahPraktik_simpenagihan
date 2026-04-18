@@ -11,7 +11,7 @@ class EmployeePerformanceController extends Controller
 {
     public function index(Request $request)
     {
-        $employees = Employee::where('is_active', true)
+        $query = Employee::where('is_active', true)
             ->withCount([
                 'tasks as total_tasks',
                 'activeTasks as active_tasks',
@@ -19,9 +19,20 @@ class EmployeePerformanceController extends Controller
                 'followups as total_followups',
                 'followups as telepon_count' => fn($q) => $q->where('type', 'telepon'),
                 'followups as kunjungan_count' => fn($q) => $q->where('type', 'kunjungan'),
-            ])
-            ->orderBy('name')
-            ->get();
+            ]);
+
+        // Search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('nip', 'like', "%{$search}%");
+            });
+        }
+
+        $employees = $query->orderBy('name')
+            ->paginate($request->input('per_page', 20))
+            ->withQueryString();
 
         // Calculate averages for each employee
         $employees->each(function ($emp) {

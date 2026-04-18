@@ -294,11 +294,13 @@ class ImportService
         }
 
         $phone = $row['phone'] ?? $row['hp'] ?? $row['phone_e164'] ?? null;
+        $email = $row['email'] ?? $row['e_mail'] ?? $row['email_address'] ?? null;
         $nik = $row['nik'] ?? null;
 
         $data = [
             'name' => $name,
             'phone_e164' => $phone,
+            'email' => $email,
             'address' => $row['address'] ?? $row['alamat'] ?? null,
             'district' => $row['district'] ?? $row['kecamatan'] ?? null,
             'sub_district' => $row['sub_district'] ?? $row['kelurahan'] ?? null,

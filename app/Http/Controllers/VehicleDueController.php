@@ -30,7 +30,7 @@ class VehicleDueController extends Controller
             $query->whereDate('due_date', '<=', $request->due_to);
         }
 
-        $vehicles = $query->orderBy('due_date')->paginate(20)->withQueryString();
+        $vehicles = $query->orderBy('due_date')->paginate($request->input('per_page', 20))->withQueryString();
         return view('reminder.vehicles.index', compact('vehicles'));
     }
 

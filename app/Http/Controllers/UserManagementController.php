@@ -9,9 +9,9 @@ use Illuminate\Validation\Rules;
 
 class UserManagementController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::latest()->paginate(20);
+        $users = User::latest()->paginate($request->input('per_page', 20))->withQueryString();
         return view('admin.users.index', compact('users'));
     }
 

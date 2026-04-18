@@ -16,7 +16,8 @@ class TaxpayerController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                   ->orWhere('nik', 'like', "%{$search}%")
-                  ->orWhere('phone_e164', 'like', "%{$search}%");
+                  ->orWhere('phone_e164', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
             });
         }
 
@@ -24,7 +25,7 @@ class TaxpayerController extends Controller
             $query->where('opt_out', $request->opt_out === 'yes');
         }
 
-        $taxpayers = $query->latest()->paginate(20)->withQueryString();
+        $taxpayers = $query->latest()->paginate($request->input('per_page', 20))->withQueryString();
         return view('reminder.taxpayers.index', compact('taxpayers'));
     }
 

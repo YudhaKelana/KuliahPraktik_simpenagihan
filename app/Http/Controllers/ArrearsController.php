@@ -34,7 +34,7 @@ class ArrearsController extends Controller
             }
         }
 
-        $arrears = $query->latest('calculation_date')->paginate(20)->withQueryString();
+        $arrears = $query->latest('calculation_date')->paginate($request->input('per_page', 20))->withQueryString();
 
         return view('monitoring.arrears.index', compact('arrears'));
     }

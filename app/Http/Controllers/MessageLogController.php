@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AuditTrail;
 use App\Models\MessageLog;
-use App\Jobs\SendWhatsappMessage;
+use App\Jobs\SendReminderEmail;
 use Illuminate\Http\Request;
 
 class MessageLogController extends Controller
@@ -23,10 +23,14 @@ class MessageLogController extends Controller
             $query->whereDate('created_at', '<=', $request->date_to);
         }
         if ($request->filled('search')) {
-            $query->where('phone', 'like', '%' . $request->search . '%');
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('phone', 'like', "%{$search}%")
+                  ->orWhere('recipient_email', 'like', "%{$search}%");
+            });
         }
 
-        $logs = $query->latest()->paginate(20)->withQueryString();
+        $logs = $query->latest()->paginate($request->input('per_page', 20))->withQueryString();
         return view('reminder.logs.index', compact('logs'));
     }
 
@@ -42,7 +46,13 @@ class MessageLogController extends Controller
             'error_message' => null,
         ]);
 
-        SendWhatsappMessage::dispatch($messageLog);
+        // Dispatch based on channel
+        if ($messageLog->channel === 'email') {
+            SendReminderEmail::dispatch($messageLog);
+        } else {
+            // Fallback to WhatsApp if channel is whatsapp
+            \App\Jobs\SendWhatsappMessage::dispatch($messageLog);
+        }
 
         AuditTrail::log('retry_send', $messageLog, null, null, "Retry pengiriman pesan #{$messageLog->id}");
 

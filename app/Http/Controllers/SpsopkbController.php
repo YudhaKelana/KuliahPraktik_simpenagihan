@@ -10,19 +10,38 @@ class SpsopkbController extends Controller
 {
     public function index(Request $request)
     {
+        $perPage = $request->input('per_page', 20);
+        $search = $request->input('search');
+
         // Candidates: follow-up >= 2 AND age >= 14 days AND not done AND no SPSOPKB yet
-        $candidates = Task::where('status', '!=', 'done')
+        $candidatesQuery = Task::where('status', '!=', 'done')
             ->whereDoesntHave('spsopkbLetter')
             ->withCount('followups')
             ->having('followups_count', '>=', config('samsat.spsopkb_min_followups', 2))
             ->whereDate('assigned_date', '<=', now()->subDays(config('samsat.spsopkb_min_age_days', 14)))
-            ->with(['arrearsItem', 'employee'])
-            ->paginate(20, ['*'], 'candidates_page');
+            ->with(['arrearsItem', 'employee']);
+
+        if ($search) {
+            $candidatesQuery->whereHas('arrearsItem', function ($q) use ($search) {
+                $q->where('plate_number', 'like', "%{$search}%")
+                  ->orWhere('owner_name', 'like', "%{$search}%");
+            });
+        }
+
+        $candidates = $candidatesQuery->paginate($perPage, ['*'], 'candidates_page')->withQueryString();
 
         // Issued letters
-        $letters = SpsopkbLetter::with(['task.arrearsItem', 'task.employee'])
-            ->latest('issued_date')
-            ->paginate(20, ['*'], 'letters_page');
+        $lettersQuery = SpsopkbLetter::with(['task.arrearsItem', 'task.employee'])
+            ->latest('issued_date');
+
+        if ($search) {
+            $lettersQuery->whereHas('task.arrearsItem', function ($q) use ($search) {
+                $q->where('plate_number', 'like', "%{$search}%")
+                  ->orWhere('owner_name', 'like', "%{$search}%");
+            });
+        }
+
+        $letters = $lettersQuery->paginate($perPage, ['*'], 'letters_page')->withQueryString();
 
         // Stats
         $totalCandidates = Task::where('status', '!=', 'done')

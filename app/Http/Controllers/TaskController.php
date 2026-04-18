@@ -48,7 +48,7 @@ class TaskController extends Controller
             }
         }
 
-        $tasks = $query->latest('assigned_date')->paginate(20)->withQueryString();
+        $tasks = $query->latest('assigned_date')->paginate($request->input('per_page', 20))->withQueryString();
         $employees = Employee::where('is_active', true)->orderBy('name')->get();
 
         return view('monitoring.tasks.index', compact('tasks', 'employees'));

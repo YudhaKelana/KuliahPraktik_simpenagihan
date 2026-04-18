@@ -11,6 +11,7 @@ class Taxpayer extends Model
         'name',
         'nik',
         'phone_e164',
+        'email',
         'address',
         'district',
         'sub_district',

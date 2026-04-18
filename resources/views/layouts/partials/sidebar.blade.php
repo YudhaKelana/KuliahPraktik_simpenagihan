@@ -60,9 +60,9 @@
             SPSOPKB
         </a>
 
-        {{-- REMINDER WHATSAPP - Semua role --}}
+        {{-- REMINDER EMAIL - Semua role --}}
         <div class="pt-4">
-            <p class="px-3 text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-2">Reminder WhatsApp</p>
+            <p class="px-3 text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-2">Reminder Email</p>
         </div>
 
         <a href="{{ route('reminder.taxpayers.index') }}"
