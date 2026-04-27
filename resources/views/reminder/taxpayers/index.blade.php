@@ -42,6 +42,7 @@
                         @endif
                     </td>
                     <td class="px-4 py-3 text-center space-x-2">
+                        <a href="{{ route('reminder.taxpayers.edit', $tp) }}" class="text-xs text-blue-600 hover:underline">Edit</a>
                         <form method="POST" action="{{ route('reminder.taxpayers.toggle-optout', $tp) }}" class="inline">@csrf
                             <button type="submit" class="text-xs text-blue-600 hover:underline">{{ $tp->opt_out ? 'Aktifkan' : 'Opt-Out' }}</button>
                         </form>

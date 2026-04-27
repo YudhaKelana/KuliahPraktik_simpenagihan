@@ -17,7 +17,13 @@
                         <td class="px-4 py-3 text-center font-bold text-blue-600">H-{{ $rule->days_before_due }}</td>
                         <td class="px-4 py-3 text-center text-gray-500 text-xs">{{ $rule->send_window_start }} — {{ $rule->send_window_end }}</td>
                         <td class="px-4 py-3 text-center"><span class="px-2 py-0.5 text-xs rounded-full {{ $rule->is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500' }}">{{ $rule->is_active ? 'Aktif' : 'Nonaktif' }}</span></td>
-                        <td class="px-4 py-3 text-center"><a href="{{ route('reminder.rules.edit', $rule) }}" class="text-xs text-blue-600 hover:underline">Edit</a></td>
+                        <td class="px-4 py-3 text-center space-x-2">
+                            <a href="{{ route('reminder.rules.edit', $rule) }}" class="text-xs text-blue-600 hover:underline">Edit</a>
+                            <form method="POST" action="{{ route('reminder.rules.destroy', $rule) }}" class="inline" onsubmit="return confirm('Yakin ingin menghapus aturan &quot;{{ $rule->name }}&quot;?')">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="text-xs text-red-600 hover:underline">Hapus</button>
+                            </form>
+                        </td>
                     </tr>
                     @empty
                     <tr><td colspan="5" class="px-4 py-8 text-center text-gray-400">Belum ada aturan</td></tr>

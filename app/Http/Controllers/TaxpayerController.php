@@ -49,7 +49,7 @@ class TaxpayerController extends Controller
         ]);
 
         $taxpayer->update($validated);
-        return redirect()->route('reminder.taxpayers.show', $taxpayer)->with('success', 'Data wajib pajak diperbarui.');
+        return redirect()->route('reminder.taxpayers.index')->with('success', 'Data wajib pajak berhasil diperbarui.');
     }
 
     public function toggleOptOut(Taxpayer $taxpayer)
