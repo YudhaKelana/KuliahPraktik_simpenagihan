@@ -68,7 +68,7 @@
                             <span class="text-xs text-gray-400">{{ $fu->followup_date->format('d/m/Y') }}</span>
                         </div>
                         @if($fu->notes)<p class="text-sm text-gray-700 dark:text-gray-300">{{ $fu->notes }}</p>@endif
-                        @if($fu->result)<p class="text-xs text-gray-500 mt-1">Hasil: {{ $fu->result }}</p>@endif
+                        @if($fu->result)<p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Hasil: {{ $fu->result }}</p>@endif
                     </div>
                     @empty
                     <p class="px-4 py-8 text-center text-gray-400 text-sm">Belum ada tindak lanjut</p>
@@ -104,7 +104,7 @@
                             <span class="text-sm font-medium text-gray-900 dark:text-white">{{ $vs->status_label }}</span>
                             <span class="text-xs text-gray-400">{{ $vs->status_date->format('d/m/Y') }}</span>
                         </div>
-                        @if($vs->notes)<p class="text-xs text-gray-500 mt-1">{{ $vs->notes }}</p>@endif
+                        @if($vs->notes)<p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ $vs->notes }}</p>@endif
                     </div>
                     @empty
                     <p class="px-4 py-8 text-center text-gray-400 text-sm">Belum ada status kendaraan</p>

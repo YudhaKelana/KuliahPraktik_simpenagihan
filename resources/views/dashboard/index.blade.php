@@ -114,7 +114,7 @@
                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30">
                             <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">{{ $t->arrearsItem->plate_number ?? '-' }}</td>
                             <td class="px-4 py-2 text-gray-600 dark:text-gray-300">{{ $t->employee->name ?? '-' }}</td>
-                            <td class="px-4 py-2 text-center">{{ $t->age_days }} hari</td>
+                            <td class="px-4 py-2 text-center text-gray-600 dark:text-gray-300">{{ $t->age_days }} hari</td>
                             <td class="px-4 py-2 text-center">
                                 @if($t->age_days >= $criticalDays)
                                     <span class="px-2 py-0.5 text-xs rounded-full bg-red-100 text-red-700">Kritis</span>
@@ -150,7 +150,7 @@
                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30">
                             <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">{{ $t->arrearsItem->plate_number ?? '-' }}</td>
                             <td class="px-4 py-2 text-gray-600 dark:text-gray-300">{{ $t->employee->name ?? '-' }}</td>
-                            <td class="px-4 py-2 text-center text-gray-500">{{ $t->latestFollowup?->followup_date?->format('d/m/Y') ?? '-' }}</td>
+                            <td class="px-4 py-2 text-center text-gray-500 dark:text-gray-400">{{ $t->latestFollowup?->followup_date?->format('d/m/Y') ?? '-' }}</td>
                         </tr>
                         @empty
                         <tr><td colspan="3" class="px-4 py-8 text-center text-gray-400">Semua sudah diinput ✓</td></tr>

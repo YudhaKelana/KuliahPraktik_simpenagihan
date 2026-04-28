@@ -38,16 +38,16 @@
                             <p class="text-xs text-gray-400">NIP: {{ $emp->nip }}</p>
                         @endif
                     </td>
-                    <td class="px-4 py-3 text-center font-medium">{{ $emp->total_tasks }}</td>
+                    <td class="px-4 py-3 text-center font-medium text-gray-900 dark:text-white">{{ $emp->total_tasks }}</td>
                     <td class="px-4 py-3 text-center"><span class="px-2 py-0.5 text-xs rounded-full {{ $emp->active_tasks > 10 ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700' }}">{{ $emp->active_tasks }}</span></td>
-                    <td class="px-4 py-3 text-center text-emerald-600">{{ $emp->done_tasks }}</td>
-                    <td class="px-4 py-3 text-center text-blue-600">{{ $emp->telepon_count }}</td>
-                    <td class="px-4 py-3 text-center text-green-600">{{ $emp->kunjungan_count }}</td>
-                    <td class="px-4 py-3 text-center text-gray-500">{{ $emp->avg_completion_days }} hari</td>
+                    <td class="px-4 py-3 text-center text-emerald-600 dark:text-emerald-400">{{ $emp->done_tasks }}</td>
+                    <td class="px-4 py-3 text-center text-blue-600 dark:text-blue-400">{{ $emp->telepon_count }}</td>
+                    <td class="px-4 py-3 text-center text-green-600 dark:text-green-400">{{ $emp->kunjungan_count }}</td>
+                    <td class="px-4 py-3 text-center text-gray-500 dark:text-gray-400">{{ $emp->avg_completion_days }} hari</td>
                     <td class="px-4 py-3 text-center">
                         <div class="flex items-center justify-center space-x-2">
                             <div class="w-16 bg-gray-200 dark:bg-gray-600 rounded-full h-1.5"><div class="bg-blue-600 h-1.5 rounded-full" style="width: {{ $emp->status_percentage }}%"></div></div>
-                            <span class="text-xs text-gray-500">{{ $emp->status_percentage }}%</span>
+                            <span class="text-xs text-gray-500 dark:text-gray-400">{{ $emp->status_percentage }}%</span>
                         </div>
                     </td>
                 </tr>

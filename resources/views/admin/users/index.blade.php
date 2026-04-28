@@ -9,7 +9,7 @@
 
     <x-data-table :paginator="$users">
         <table class="w-full text-sm" data-sortable>
-            <thead class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-500 uppercase">
+            <thead class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-500 dark:text-gray-400 uppercase">
                 <tr>
                     <th class="px-4 py-3 text-left" data-sort>Nama</th>
                     <th class="px-4 py-3 text-left" data-sort>Email</th>
@@ -22,7 +22,7 @@
                 @foreach($users as $user)
                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30">
                     <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">{{ $user->name }}</td>
-                    <td class="px-4 py-3 text-gray-500">{{ $user->email }}</td>
+                    <td class="px-4 py-3 text-gray-500 dark:text-gray-400">{{ $user->email }}</td>
                     <td class="px-4 py-3 text-center">
                         <span class="px-2 py-0.5 text-xs rounded-full font-medium
                             {{ $user->role === 'administrator_sistem' ? 'bg-purple-100 text-purple-700' : ($user->role === 'koordinator_penagihan' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700') }}">

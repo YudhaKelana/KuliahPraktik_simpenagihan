@@ -54,7 +54,7 @@
 
                     {{-- Variable buttons --}}
                     <div class="flex flex-wrap gap-1.5 mt-2">
-                        <span class="text-xs text-gray-500 py-1">Variabel:</span>
+                        <span class="text-xs text-gray-500 dark:text-gray-400 py-1">Variabel:</span>
                         <button type="button" class="var-btn px-2 py-1 text-xs rounded-md bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-200 transition font-mono" data-var="{nama}">
                             {nama}
                         </button>

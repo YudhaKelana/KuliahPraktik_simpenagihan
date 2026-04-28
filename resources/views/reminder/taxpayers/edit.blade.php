@@ -65,35 +65,35 @@
 
                 {{-- Info read-only --}}
                 <div class="p-3 rounded-lg bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600">
-                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Informasi Lainnya</p>
+                    <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Informasi Lainnya</p>
                     <div class="grid grid-cols-3 gap-3 text-sm">
                         <div>
-                            <span class="text-gray-400 text-xs">Kecamatan</span>
+                            <span class="text-gray-400 dark:text-gray-500 text-xs">Kecamatan</span>
                             <p class="text-gray-700 dark:text-gray-300">{{ $taxpayer->district ?? '-' }}</p>
                         </div>
                         <div>
-                            <span class="text-gray-400 text-xs">Kelurahan</span>
+                            <span class="text-gray-400 dark:text-gray-500 text-xs">Kelurahan</span>
                             <p class="text-gray-700 dark:text-gray-300">{{ $taxpayer->sub_district ?? '-' }}</p>
                         </div>
                         <div>
-                            <span class="text-gray-400 text-xs">Kode Pos</span>
+                            <span class="text-gray-400 dark:text-gray-500 text-xs">Kode Pos</span>
                             <p class="text-gray-700 dark:text-gray-300">{{ $taxpayer->postal_code ?? '-' }}</p>
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-3 mt-2 text-sm">
                         <div>
-                            <span class="text-gray-400 text-xs">Status Opt-Out</span>
+                            <span class="text-gray-400 dark:text-gray-500 text-xs">Status Opt-Out</span>
                             <p>
                                 @if($taxpayer->opt_out)
                                     <span class="px-2 py-0.5 text-xs rounded-full bg-red-100 text-red-700">Opt-Out</span>
-                                    <span class="text-xs text-gray-400 ml-1">{{ $taxpayer->opt_out_at?->format('d/m/Y H:i') }}</span>
+                                    <span class="text-xs text-gray-400 dark:text-gray-500 ml-1">{{ $taxpayer->opt_out_at?->format('d/m/Y H:i') }}</span>
                                 @else
                                     <span class="px-2 py-0.5 text-xs rounded-full bg-emerald-100 text-emerald-700">Aktif</span>
                                 @endif
                             </p>
                         </div>
                         <div>
-                            <span class="text-gray-400 text-xs">Jumlah Kendaraan</span>
+                            <span class="text-gray-400 dark:text-gray-500 text-xs">Jumlah Kendaraan</span>
                             <p class="text-gray-700 dark:text-gray-300 font-medium">{{ $taxpayer->vehicles()->count() }}</p>
                         </div>
                     </div>

@@ -17,7 +17,7 @@
 
     <x-data-table :paginator="$vehicles">
         <table class="w-full text-sm" data-sortable>
-            <thead class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-500 uppercase">
+            <thead class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-500 dark:text-gray-400 uppercase">
                 <tr>
                     <th class="px-4 py-3 text-left" data-sort>Nopol</th>
                     <th class="px-4 py-3 text-left" data-sort>Wajib Pajak</th>
@@ -29,8 +29,8 @@
                 @forelse($vehicles as $v)
                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30">
                     <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">{{ $v->plate_number }}</td>
-                    <td class="px-4 py-3 text-gray-600">{{ $v->taxpayer->name ?? '-' }}</td>
-                    <td class="px-4 py-3 text-center {{ $v->due_date && $v->due_date->isPast() && $v->status_payment === 'unpaid' ? 'text-red-600 font-medium' : 'text-gray-500' }}">{{ $v->due_date?->format('d/m/Y') ?? '-' }}</td>
+                    <td class="px-4 py-3 text-gray-600 dark:text-gray-300">{{ $v->taxpayer->name ?? '-' }}</td>
+                    <td class="px-4 py-3 text-center {{ $v->due_date && $v->due_date->isPast() && $v->status_payment === 'unpaid' ? 'text-red-600 dark:text-red-400 font-medium' : 'text-gray-500 dark:text-gray-400' }}">{{ $v->due_date?->format('d/m/Y') ?? '-' }}</td>
                     <td class="px-4 py-3 text-center">
                         <span class="px-2 py-0.5 text-xs rounded-full {{ $v->status_payment === 'paid' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700' }}">{{ $v->status_payment === 'paid' ? 'Lunas' : 'Belum' }}</span>
                     </td>

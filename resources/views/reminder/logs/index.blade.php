@@ -18,7 +18,7 @@
 
     <x-data-table :paginator="$logs">
         <table class="w-full text-sm" data-sortable>
-            <thead class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-500 uppercase">
+            <thead class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-500 dark:text-gray-400 uppercase">
                 <tr>
                     <th class="px-4 py-3 text-left" data-sort>ID</th>
                     <th class="px-4 py-3 text-left" data-sort>Tujuan</th>
@@ -33,9 +33,9 @@
                 @forelse($logs as $log)
                 @php $lc = ['queued'=>'bg-gray-100 text-gray-700','sent'=>'bg-blue-100 text-blue-700','delivered'=>'bg-emerald-100 text-emerald-700','read'=>'bg-green-100 text-green-700','failed'=>'bg-red-100 text-red-700']; @endphp
                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30">
-                    <td class="px-4 py-3 text-gray-400 text-xs">#{{ $log->id }}</td>
-                    <td class="px-4 py-3 text-gray-600">{{ $log->recipient_email ?? $log->phone ?? '-' }}</td>
-                    <td class="px-4 py-3 text-gray-500 text-xs max-w-[200px] truncate" title="{{ $log->message_body }}">{{ Str::limit($log->message_body, 50) }}</td>
+                    <td class="px-4 py-3 text-gray-400 dark:text-gray-500 text-xs">#{{ $log->id }}</td>
+                    <td class="px-4 py-3 text-gray-600 dark:text-gray-300">{{ $log->recipient_email ?? $log->phone ?? '-' }}</td>
+                    <td class="px-4 py-3 text-gray-500 dark:text-gray-400 text-xs max-w-[200px] truncate" title="{{ $log->message_body }}">{{ Str::limit($log->message_body, 50) }}</td>
                     <td class="px-4 py-3 text-center"><span class="px-2 py-0.5 text-xs rounded-full font-medium {{ $lc[$log->status] ?? '' }}">{{ ucfirst($log->status) }}</span></td>
                     <td class="px-4 py-3 text-center text-gray-400">{{ $log->retry_count }}</td>
                     <td class="px-4 py-3 text-xs text-red-500 max-w-[150px] truncate">{{ $log->error_message ?? '-' }}</td>
